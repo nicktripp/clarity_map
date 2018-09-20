@@ -1,11 +1,13 @@
 import React from 'react'
-// Import App components
+import VisibleMap from '../containers/VisibleMap'
+import Searchbar from './Searchbar'
+
+
 
 const App = () => (
     <div>
-        {/*
-         * App components
-         */}
+        <VisibleMap />
+        <Searchbar />
     </div>
 )
 
@@ -17,25 +19,25 @@ App state:
 {
     map: {
         zoom: int,
-        coords: {
-            lat: float,
-            long: float,
-        },
-        points: [
-            {nodes?}
-        ]
+        lat: float,
+        long: float,
     },
+
+    visiblePoints: [
+        {nodes?}
+    ]
 
     search: {
         input: str
     },
-
+    isResultListVisible: bool,
     resultList: {
-        isVisible: bool,
+
         results: [
             result1: {
-                name: str
-                coords: {...}
+                name: str,
+                lat: float,
+                long: float,
             },
             result2: {...},
         ]
