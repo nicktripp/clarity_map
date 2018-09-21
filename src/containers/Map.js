@@ -4,7 +4,7 @@ import Immutable from 'immutable'
 import { diffStyles } from 'mapbox-gl'
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import { setStyle } from '../actions'
+import { setStyle, clickMap } from '../actions'
 
 class Map extends React.Component {
 
@@ -26,6 +26,27 @@ class Map extends React.Component {
         this.map.on('load', () => {
             const style = this.map.getStyle();
             this.props.setStyle(style)
+
+            // Listen for a map click, get the features under the pointer
+            // and pass them to a "clickMap" action that might update our UI
+            // or highlight the feature in the stylesheet:
+            this.map.on('click', event => {
+                const map = {
+                    lng: event.lngLat.lng,
+                    lat: event.lngLat.lat,
+                }
+                this.props.clickMap(map); // <= action creator
+
+                // We can also use the native mapbox popup if the clickMap
+                // action sets some html to show and passes it as a prop:
+                if(this.props.showPopUp && this.props.popup != null) {
+                    new mapboxgl.Popup()
+                    .setLngLat(event.lngLat)
+                    .setHTML(this.props.popup)
+                    .addTo(this.map);
+                }
+            });
+
         })
     }
 
@@ -69,14 +90,15 @@ class Map extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    setStyle: setStyle
+    setStyle: setStyle,
+    clickMap: clickMap,
   }, dispatch);
 }
 function mapStateToProps(state) {
   return {
     mapStyle: state.mapStyle,
+    popup: state.popup,
   };
 }
 
-console.log("Connecting Map to Redux...")
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
