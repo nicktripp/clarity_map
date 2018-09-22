@@ -8,8 +8,50 @@ import { setStyle, clickMap } from '../actions'
 
 class Map extends React.Component {
 
+    generateNodeLayer(nodeList) {
+        var data = []
+        for (const node of nodeList) {
+            data.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [node.location.longitude, node.location.latitude]
+                },
+                "properties": {
+                    "title": node.name,
+                    "aqi": node.aqi,
+                },
+            });
+        }
+
+        this.map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', (error, image) => { this.map.addImage('cat', image) })
+
+        const ptsLayer = {
+            "id": "points",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": data,
+                },
+            },
+            "layout": {
+                "icon-image": "cat",
+                "icon-size": .05,
+                "text-field": "{ title }",
+                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                "text-offset": [0, 0.6],
+                "text-anchor": "top"
+            }
+        }
+
+        console.log(ptsLayer)
+        return ptsLayer
+    }
+
     componentDidMount() {
-        const { token, longitude, latitude, zoom, styleID } = this.props;
+        const { token, longitude, latitude, zoom, styleID, nodes, } = this.props;
 
         const mapConfig = {
             container: 'map',
@@ -24,6 +66,10 @@ class Map extends React.Component {
 
 
         this.map.on('load', () => {
+            // Add all nodes to map
+            const nodeLayer = this.generateNodeLayer(nodes)
+            this.map.addLayer(nodeLayer);
+
             const style = this.map.getStyle();
             this.props.setStyle(style)
 
@@ -98,6 +144,7 @@ function mapStateToProps(state) {
   return {
     mapStyle: state.mapStyle,
     popup: state.popup,
+    nodes: state.nodes,
   };
 }
 

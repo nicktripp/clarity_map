@@ -1,8 +1,7 @@
-import React from 'react'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux'
 
-import { SET_STYLE, CLICK_MAP } from './actions'
+import { SET_STYLE, CLICK_MAP, } from './actions'
 
 function StylesheetReducer(styleState = null, action) {
     switch(action.type) {
