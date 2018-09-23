@@ -7,6 +7,8 @@ import rootReducer from './reducers'
 import App from './components/App'
 import INIT_STATE from './initState'
 
+import './index.css';
+
 const store = createStore(rootReducer, INIT_STATE)
 
 

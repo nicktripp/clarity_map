@@ -21,44 +21,10 @@ const App = () => (
             showPopUp= { true }
             styleID = { STYLE_ID }
         />
-        <Searchbar />
+        <div className="overlays absolute top left">
+            <Searchbar />
+        </div>
     </div>
 )
 
 export default App;
-
-
-/*
-App state:
-{
-    map: {
-        zoom: int,
-        lat: float,
-        long: float,
-    },
-
-    visiblePoints: [
-        {nodes?}
-    ]
-
-    search: {
-        input: str
-    },
-    isResultListVisible: bool,
-    resultList: {
-
-        results: [
-            result1: {
-                name: str,
-                lat: float,
-                long: float,
-            },
-            result2: {...},
-        ]
-    }
-
-
-}
-
-
-*/
