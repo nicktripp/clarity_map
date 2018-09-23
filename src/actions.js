@@ -10,9 +10,9 @@ export function setStyle(style) {
     }
 }
 
-export function clickMap(map) {
+export function clickMap(payload) {
     return {
         type: CLICK_MAP,
-        map,
+        payload,
     }
 }
