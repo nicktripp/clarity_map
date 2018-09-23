@@ -1,6 +1,7 @@
 import React from 'react'
 import Map from '../containers/Map'
 import Searchbar from './Searchbar'
+import Legend from './Legend'
 
 const TOKEN = "pk.eyJ1Ijoibmlja2V0cmlwcCIsImEiOiJjam05cDE4ODAwOWY0M3FxZDA0MDB4aWQ5In0.8fWVxjwG_mYqiVzkXFKpxw";
 const STYLE_ID = 'streets-v9';
@@ -23,6 +24,7 @@ const App = () => (
         />
         <div className="overlays absolute top left">
             <Searchbar />
+            <Legend />
         </div>
     </div>
 )
