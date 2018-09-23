@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import { combineReducers } from 'redux'
 
-import { SET_STYLE, CLICK_MAP, } from './actions'
+import { SET_STYLE, CLICK_MAP, SET_GEOCODER, SET_SEARCH_RESULTS } from './actions'
 
 function StylesheetReducer(styleState = null, action) {
     switch(action.type) {
@@ -44,6 +44,15 @@ function popupCreator(data) {
 
 }
 
+function GeocodeReducer(geocoder = null, action) {
+    switch(action.type) {
+        case SET_GEOCODER:
+            return action.geocoder
+        default:
+            return geocoder
+    }
+}
+
 function PopupReducer(popup = null, action) {
     switch(action.type) {
         case CLICK_MAP:
@@ -57,10 +66,21 @@ function nodes(nodes = null, action) {
     return nodes
 }
 
+function searchResults(searchResults = null, action) {
+    switch(action.type) {
+        case SET_SEARCH_RESULTS:
+            return action.results
+        default:
+            return searchResults
+    }
+}
+
 const rootReducer = combineReducers({
     mapStyle: StylesheetReducer,
     popup: PopupReducer,
     nodes,
+    geocoder: GeocodeReducer,
+    searchResults,
 });
 
 export default rootReducer

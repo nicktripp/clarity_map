@@ -1,6 +1,6 @@
 import React from 'react'
 import Map from '../containers/Map'
-import Searchbar from './Searchbar'
+import Searchbar from '../containers/Searchbar'
 import Legend from './Legend'
 
 const TOKEN = "pk.eyJ1Ijoibmlja2V0cmlwcCIsImEiOiJjam05cDE4ODAwOWY0M3FxZDA0MDB4aWQ5In0.8fWVxjwG_mYqiVzkXFKpxw";
