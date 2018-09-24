@@ -28,6 +28,7 @@ function generateNode(node, id) {
             "aqi": node.aqi,
             "lng": node.location.longitude,
             "lat": node.location.latitude,
+            "type": "node"
         },
     }
 }
@@ -53,7 +54,7 @@ export function generateNodeLayer(nodeList) {
         },
         "paint": {
             "circle-opacity": 0.75,
-            "circle-radius": 30,
+            "circle-radius": 15,
             "circle-color": ["case",
                 ["boolean", ["feature-state", "hover"], false],
                 "#888888",

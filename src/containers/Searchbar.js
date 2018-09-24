@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux"
 import { Input, Card } from 'antd';
 
 import { setSearchResults } from '../actions'
+import ResultList from '../containers/ResultList'
 
 const Search = Input.Search;
 
@@ -28,12 +29,12 @@ class Searchbar extends React.Component {
     }
 
     render() {
+        // Finish Geocoder setup
         if (this.props.geocoder !== null && this.props.searchResults === null) {
-            console.log("Setting results listener")
-            this.props.geocoder.on("results", (results) => {
-                const combined_features = localSearchResults.slice(0,3).concat(results.features.slice(0,3))
-                results.features = combined_features
-                this.props.setSearchResults(results)
+            this.props.geocoder.on("results", (searchResults) => {
+                const combined_features = localSearchResults.slice(0,3).concat(searchResults.features.slice(0,3))
+                searchResults.features = combined_features
+                this.props.setSearchResults(searchResults)
             })
         }
         return (
@@ -48,13 +49,17 @@ class Searchbar extends React.Component {
                     />
                     <div className="searchTitle inline-block">| nicktripp</div>
                 </div>
-                <Search
-                    id="search"
-                    placeholder="Search"
-                    size="large"
-                    enterButton
-                    onInput={() => { this.search_debounce() }}
-                />
+                <div id="searchContainer">
+                    <Search
+                        autoComplete="off"
+                        id="search"
+                        placeholder="Search"
+                        size="large"
+                        enterButton
+                        onInput={() => { this.search_debounce() }}
+                    />
+                    <ResultList className="resultList" />
+                </div>
             </Card>
         )
     }

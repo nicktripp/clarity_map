@@ -1,7 +1,11 @@
+import React from 'react'
+import ReactDOMServer from 'react-dom/server';
 import Immutable from 'immutable'
 import { combineReducers } from 'redux'
+import { Card, Tag } from 'antd'
 
-import { SET_STYLE, CLICK_MAP, SET_GEOCODER, SET_SEARCH_RESULTS } from './actions'
+import getColor from './data/aqi'
+import { SET_STYLE, CLICK_MAP, SET_GEOCODER, SET_SEARCH_RESULTS, HIGHLIGHT_AND_FLY_TO_PT } from './actions'
 
 function StylesheetReducer(styleState = null, action) {
     switch(action.type) {
@@ -15,32 +19,31 @@ function StylesheetReducer(styleState = null, action) {
 function nodePopupCreator(node) {
     if(!node) return null;
 
-    const { title, aqi, lng, lat } = node.properties
-    return `<div>
-                ${ title } <br />
-                AQU: ${ aqi } <br />
-                LONG: ${ lng.toFixed(4) } <br />
-                LAT:  ${ lat.toFixed(4) } <br />
-            </div>`
+    const { title, aqi, } = node.properties
+    return ReactDOMServer.renderToString(
+        <Card
+            title={title}
+            bodyStyle={{padding: "0px"}}
+        >
+            <div className="popupContent">
+                <Tag className={"popupTag " + (getColor(aqi) === "#FFFF00" ? "txt-black" : "")} color={getColor(aqi)}>
+                    AQI: {aqi}
+                </Tag>
+
+            </div>
+        </Card>
+    )
 }
 
-function mapPopupCreator(map) {
-    if(!map) return null;
-
-    const { lng, lat } = map;
-    return `<div>
-                LONG: ${ lng.toFixed(4) } <br />
-                LAT:  ${ lat.toFixed(4) } <br />
-            </div>`
-}
 
 function popupCreator(data) {
     if(!data) return null;
 
-    if (data.type === 'mapClick')
-        return mapPopupCreator(data)
-    else
+    if (data.type === 'mapClick') {
+        return null;
+    } else {
         return nodePopupCreator(data)
+    }
 
 }
 
@@ -69,9 +72,18 @@ function nodes(nodes = null, action) {
 function searchResults(searchResults = null, action) {
     switch(action.type) {
         case SET_SEARCH_RESULTS:
-            return action.results
+            return action.searchResults
         default:
             return searchResults
+    }
+}
+
+function highlightedPoint(highlightedPoint = null, action) {
+    switch(action.type) {
+        case HIGHLIGHT_AND_FLY_TO_PT:
+            return action.nodeData
+        default:
+            return highlightedPoint
     }
 }
 
@@ -81,6 +93,7 @@ const rootReducer = combineReducers({
     nodes,
     geocoder: GeocodeReducer,
     searchResults,
+    highlightedPoint,
 });
 
 export default rootReducer

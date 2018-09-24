@@ -9,6 +9,8 @@ import MapboxGeocoder from 'mapbox-gl-geocoder'
 import { setStyle, clickMap, setGeocoder } from '../actions'
 import { generateNodeLayer, NODES_LAYER } from '../data/generateGeoJson'
 
+var lastHighlightedPt = null
+
 class Map extends React.Component {
 
     // Helper functions
@@ -103,7 +105,7 @@ class Map extends React.Component {
             // We can also use the native mapbox popup if the clickMap
             // action sets some html to show and passes it as a prop:
             if(this.props.showPopUp && this.props.popup != null) {
-                new mapboxgl.Popup()
+                new mapboxgl.Popup({className: 'popup'})
                 .setLngLat(event.lngLat)
                 .setHTML(this.props.popup)
                 .addTo(this.map);
@@ -134,6 +136,29 @@ class Map extends React.Component {
         });
     }
 
+    configSinglePointLayer() {
+        this.map.addSource('single-point', {
+            "type": "geojson",
+            "data": {
+            "type": "FeatureCollection",
+            "features": []
+            }
+        });
+
+        this.map.addLayer({
+            "id": "point",
+            "source": "single-point",
+            "type": "circle",
+            "paint": {
+                "circle-radius": 15,
+                "circle-color": "#007cbf",
+                "circle-opacity": 0,
+                "circle-stroke-width": 5,
+                "circle-stroke-color": "#00E400",
+            }
+
+        });
+    }
 
 ////////////////////////////
 
@@ -146,6 +171,7 @@ class Map extends React.Component {
         this.map.on('load', () => {
             // Add all nodes to map
             this.configNodes()
+            this.configSinglePointLayer()
 
             const style = this.map.getStyle();
             this.props.setStyle(style)
@@ -153,6 +179,7 @@ class Map extends React.Component {
             this.configMapClick()
 
             hoveredNodeID = this.configNodeHover(hoveredNodeID)
+
 
         })
     }
@@ -188,7 +215,27 @@ class Map extends React.Component {
         }
     }
 
+    onFlyToPoint() {
+        // Add pt, if not a node
+        if (!this.props.highlightedPoint.isNode) {
+            this.map.getSource('single-point').setData({
+                "coordinates": this.props.highlightedPoint.coords,
+                "type": "Point",
+            })
+        }
+
+        this.map.flyTo({
+            center: this.props.highlightedPoint.coords,
+            zoom: 14,
+        })
+    }
+
     render () {
+        if (this.props.highlightedPoint !== null && this.props.highlightedPoint !== lastHighlightedPt) {
+            this.onFlyToPoint()
+            lastHighlightedPt = this.props.highlightedPoint
+        }
+
         return (
             <div id="map" />
         )
@@ -208,6 +255,7 @@ function mapStateToProps(state) {
     popup: state.popup,
     nodes: state.nodes,
     geocoder: state.geocoder,
+    highlightedPoint: state.highlightedPoint,
   };
 }
 

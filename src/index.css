@@ -6,7 +6,7 @@
 
 .searchCard {
     width: 450px;
-    z-index: 50;
+    z-index: 55;
 }
 .searchLogo {
     height: 30px;
@@ -46,4 +46,41 @@
     border-color: #DDDDDD;
     border-radius: 4px;
     vertical-align: middle;
+}
+
+.resultList {
+    width: 100%;
+    visibility: hidden;
+    position: absolute;
+    bottom: 10px; */
+    top: 0px;
+    left: 0px;
+    padding: 8px;
+}
+
+.result {
+    width: 100%;
+    visibility: visible;
+    display: block;
+}
+
+.popup {
+    padding: 0px;
+}
+
+.popup > div {
+    padding: 0px;
+}
+
+.popupContent {
+    padding: 10px;
+}
+
+.txt-black {
+    color: black;
+}
+
+.popupTag {
+    width: 100%;
+    text-align: center;
 }

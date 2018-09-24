@@ -6,6 +6,7 @@ const INIT_STATE = {
     nodes: nodes.nodesList,
     geocoder: null,
     searchResults: null,
+    highlightedPoint: null,
 }
 
 export default INIT_STATE;
