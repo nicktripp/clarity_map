@@ -7,11 +7,17 @@ import { setSearchResults, highlightAndFlyToPt } from '../actions'
 
 const Option = Select.Option
 
+/**
+ * Holds the result of our geocode search.
+ */
 class ResultList extends React.Component {
     getContainer(triggerNode) {
         return document.getElementById("searchContainer")
     }
 
+    /**
+     * On selecting a result from the list, this function is called.  The callback 1) sets the search text to the selected feature, 2) empties the results list, and 3) signals our app to fly-to the selected feature.
+     */
     handleChange(selectedResult) {
         // Fill In Searchbar with selection
         document.getElementById("search").value = selectedResult.label
@@ -29,6 +35,10 @@ class ResultList extends React.Component {
         this.props.setSearchResults(null)
     }
 
+    /**
+     * If there are no searchResults (we haven't typed anything), display nothing.
+     * NOTE: the default <Select> tag has a `visibility: hidden` as defined in index.css, in favor of the results list being attached to our searchBar.
+     */
     render () {
         const { searchResults } = this.props
         if (searchResults !== null) {

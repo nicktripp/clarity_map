@@ -11,14 +11,25 @@ const Search = Input.Search;
 var localSearchResults = [];
 
 class Searchbar extends React.Component {
+
+    /**
+     * A wrapper for search().
+     * Debounces searchbar input, so we make fewer requests while a user is still typing.
+     */
     search_debounce() {
         clearTimeout(this.delay)
         this.delay = setTimeout(() => {this.search()}, 500);
     }
 
+    /**
+     * Searches map geocoder for the query found in this Searchbar. It does this in two steps:
+     *      1) Searches our localGeocoder over our nodes, and saves the result in a temporary variable.
+     *      2) Submits a query to search the mapbox geocoder.
+     *  After this, these results are combined in the geocoder.on("results") callback defined once in the render() method below.
+     */
     search(){
         const search_term = document.getElementById("search").value
-        if (search_term.length <= 2) { return }
+        if (search_term.length < 2) { return }
 
         const geo = this.props.geocoder
 
@@ -29,8 +40,9 @@ class Searchbar extends React.Component {
     }
 
     render() {
-        // Finish Geocoder setup
+        // Finishes geocoder setup.  Pro
         if (this.props.geocoder !== null && this.props.searchResults === null) {
+            // Provide a callback to combine local & global geocoder results into one, and then set the searchResults property.
             this.props.geocoder.on("results", (searchResults) => {
                 const combined_features = localSearchResults.slice(0,3).concat(searchResults.features.slice(0,3))
                 searchResults.features = combined_features

@@ -5,7 +5,9 @@ export const SET_GEOCODER = "SET_GEOCODER"
 export const SET_SEARCH_RESULTS = "SET_SEARCH_RESULTS"
 export const HIGHLIGHT_AND_FLY_TO_PT = "HIGHLIGHT_AND_FLY_TO_PT"
 
-// Action creators
+/**
+ * The map style is to be changed.
+ */
 export function setStyle(style) {
     return {
         type: SET_STYLE,
@@ -13,6 +15,9 @@ export function setStyle(style) {
     }
 }
 
+/**
+ * The map has been clicked, resulting in a payload of event data.
+ */
 export function clickMap(payload) {
     return {
         type: CLICK_MAP,
@@ -20,6 +25,9 @@ export function clickMap(payload) {
     }
 }
 
+/**
+ * A geocoder is to be added to our map
+ */
 export function setGeocoder(geocoder) {
     return {
         type: SET_GEOCODER,
@@ -27,6 +35,9 @@ export function setGeocoder(geocoder) {
     }
 }
 
+/**
+ * A geocoder was queried and returned the following results
+ */
 export function setSearchResults(searchResults) {
     return {
         type: SET_SEARCH_RESULTS,
@@ -34,6 +45,9 @@ export function setSearchResults(searchResults) {
     }
 }
 
+/**
+ * Indicates that a point(stored in nodeData) should be flown to on the map.
+ */
 export function highlightAndFlyToPt(nodeData) {
     return {
         type: HIGHLIGHT_AND_FLY_TO_PT,

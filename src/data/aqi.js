@@ -12,6 +12,9 @@ const colors = {
     500: '#7E0023'
 }
 
+/**
+ * Transforms a given aqi into a string containing the corresponding AQI-level hex color.
+ */
 export default function getColor(aqi) {
     const key = Math.trunc(aqi/50)*50
     return colors[key]
