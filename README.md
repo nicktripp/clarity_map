@@ -2,6 +2,28 @@
 
 **The following are notes about the implementation of this code challenge.**
 
+## How To Run This Project
+
+### Install
+
+First, clone this repo and install all dependencies:
+
+    git clone git@github.com:nicktripp/clarity_map.git
+    cd clarity_map
+    npm i
+
+Now, start the app:
+
+    npm start
+
+### Usage
+
+My version of Openmap works similarly to Clarity Openmap, in that you can zoom and scroll over the map, click nodes to view air quality information, and query over the names of these nodes in the search bar.  However, unlike Clarity Openmap, searching the search bar also queries existing, real, world-wide location data, including monuments, parks, countries, cities, addresses, and more.
+
+As you type in the search bar, the app autocompletes your results with a list of node/real-world result data.
+
+Clicking a result from the results list will focus the map on that point.
+
 ## On This Implementation
 
 The code I wrote is in the following directory structure:
@@ -83,11 +105,13 @@ This large file handles mapbox Map behavior.  It's mostly initializing callbacks
 
 #### *ResultList.js*
 
-This file handles styling for our searchResults.  To do this, it dynamically populates an antd <Select> dropdown with searchResults.  Should one be selected, it clears the results and signals the map to fly to the selected point.
+This file handles styling for our searchResults.  To do this, it dynamically populates an `antd` Select dropdown with searchResults.  Should one be selected, it clears the results and signals the map to fly to the selected point.
 
 #### *Searchbar.js*
 
 This file 1) defines the layout of the search bar overlay, 2) defines input behavior to send queries the geocoders defined in `./Map.js`, and 3) specifies how to store the results of those queries back into the redux store.
+
+NOTE: these stored results are limited to only 3 results each of node and world-data.
 
 ## ***/src/data***
 

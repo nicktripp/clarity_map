@@ -26,6 +26,8 @@ class Searchbar extends React.Component {
      *      1) Searches our localGeocoder over our nodes, and saves the result in a temporary variable.
      *      2) Submits a query to search the mapbox geocoder.
      *  After this, these results are combined in the geocoder.on("results") callback defined once in the render() method below.
+     *
+     * NOTE: The searchData stores ONLY the top 3 results each from node data and world data.
      */
     search(){
         const search_term = document.getElementById("search").value
