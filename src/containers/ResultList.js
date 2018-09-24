@@ -19,20 +19,23 @@ class ResultList extends React.Component {
      * On selecting a result from the list, this function is called.  The callback 1) sets the search text to the selected feature, 2) empties the results list, and 3) signals our app to fly-to the selected feature.
      */
     handleChange(selectedResult) {
-        // Fill In Searchbar with selection
-        document.getElementById("search").value = selectedResult.label
-
         const feature = this.props.searchResults.features.filter((result) => {
             return result.id.toString() === selectedResult.key
         })[0]
+
+        if (!feature) { return }
 
         const coords = feature.geometry.coordinates
         const isNode = feature.properties.type !== undefined && feature.properties.type === "node"
 
         // Move map and highlight specified point
         this.props.highlightAndFlyToPt({coords, isNode})
-        // Clear search results upon entry
-        this.props.setSearchResults(null)
+
+        // this.props.setSearchResults(null)
+        document.getElementById("search").blur()
+
+        // Fill In Searchbar with selection
+        document.getElementById("search").value = selectedResult.label.slice().replace("📍 ", "")
     }
 
     /**

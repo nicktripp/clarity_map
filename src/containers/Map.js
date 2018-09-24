@@ -35,29 +35,14 @@ class Map extends React.Component {
      * Initializes a mapbox geocoder and adds it to the map.
      */
     configGeocoder() {
-        function getUniqueFeatures(array, comparatorProperty) {
-            var existingFeatureKeys = {};
-            // Because features come from tiled vector data, feature geometries may be split
-            // or duplicated across tile boundaries and, as a result, features may appear
-            // multiple times in query results.
-            var uniqueFeatures = array.filter(function(el) {
-                if (existingFeatureKeys[el[comparatorProperty]]) {
-                    return false;
-                } else {
-                    existingFeatureKeys[el[comparatorProperty]] = true;
-                    return true;
-                }
-            });
-
-            return uniqueFeatures;
-        }
 
         // Create a local geocoder to query our hardcoded Clarity nodes
         const nodesGeocoder = (query) => {
-            var nodes = this.map.querySourceFeatures(NODES_LAYER)
-            nodes = getUniqueFeatures(nodes, "id")
+            var nodes = this.map.getSource(NODES_LAYER)._data.features
+
             var matchedNodes = [];
-            for (const node of nodes) {
+            for (const original_node of nodes) {
+                const node = JSON.parse(JSON.stringify(original_node))
                 if(node.properties.title.toLowerCase().search(query.toLowerCase()) !== -1)
                 {
                     node['place_name'] = '📍 ' + node.properties.title;

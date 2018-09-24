@@ -9,6 +9,7 @@ import ResultList from '../containers/ResultList'
 const Search = Input.Search;
 
 var localSearchResults = [];
+var addedListener = false;
 
 class Searchbar extends React.Component {
 
@@ -27,29 +28,36 @@ class Searchbar extends React.Component {
      *      2) Submits a query to search the mapbox geocoder.
      *  After this, these results are combined in the geocoder.on("results") callback defined once in the render() method below.
      *
-     * NOTE: The searchData stores ONLY the top 3 results each from node data and world data.
      */
     search(){
-        const search_term = document.getElementById("search").value
-        if (search_term.length < 2) { return }
+
+        // NOTE: Hacky way to stop early sesrching
+        if (!this.props.mapStyle) {
+            return;
+        }
+
+        var search_term = document.getElementById("search").value
+        if (search_term === "") { search_term = " "}
 
         const geo = this.props.geocoder
 
         console.log("Searching for '" + search_term + "'...")
-        localSearchResults = geo.options.localGeocoder(search_term)
+        localSearchResults = geo.options.localGeocoder(search_term).slice()
 
         geo.query(search_term)
     }
 
     render() {
-        // Finishes geocoder setup.  Pro
-        if (this.props.geocoder !== null && this.props.searchResults === null) {
+        // Finishes geocoder setup.
+        if (this.props.geocoder !== null && !addedListener) {
             // Provide a callback to combine local & global geocoder results into one, and then set the searchResults property.
             this.props.geocoder.on("results", (searchResults) => {
-                const combined_features = localSearchResults.slice(0,3).concat(searchResults.features.slice(0,3))
-                searchResults.features = combined_features
-                this.props.setSearchResults(searchResults)
+                const combined_features = localSearchResults.concat(searchResults.features)
+                const new_results = Object.assign({}, searchResults, {features: combined_features})
+                this.props.setSearchResults(new_results)
+                localSearchResults = []
             })
+            addedListener = true
         }
         return (
             <Card
@@ -69,8 +77,9 @@ class Searchbar extends React.Component {
                         id="search"
                         placeholder="Search"
                         size="large"
-                        enterButton
                         onInput={() => { this.search_debounce() }}
+                        onFocus={(query) => { this.search_debounce() } }
+                        onBlur ={() => { this.props.setSearchResults(null) }}
                     />
                     <ResultList className="resultList" />
                 </div>
@@ -88,6 +97,7 @@ function mapStateToProps(state) {
   return {
     geocoder: state.geocoder,
     searchResults: state.searchResults,
+    mapStyle: state.mapStyle,
   };
 }
 

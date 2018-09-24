@@ -24,6 +24,13 @@ As you type in the search bar, the app autocompletes your results with a list of
 
 Clicking a result from the results list will focus the map on that point.
 
+#### Try It Out!
+Try typing the following test queries into the searchbar!
+
+    Auckland
+    Musick
+    Wellington
+
 ## On This Implementation
 
 The code I wrote is in the following directory structure:
@@ -110,8 +117,6 @@ This file handles styling for our searchResults.  To do this, it dynamically pop
 #### *Searchbar.js*
 
 This file 1) defines the layout of the search bar overlay, 2) defines input behavior to send queries the geocoders defined in `./Map.js`, and 3) specifies how to store the results of those queries back into the redux store.
-
-NOTE: these stored results are limited to only 3 results each of node and world-data.
 
 ## ***/src/data***
 
